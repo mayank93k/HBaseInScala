@@ -1,20 +1,14 @@
-package spark.practice.mayank.hbase
+package scala.hbase.org
 
-import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
-import org.apache.hadoop.hbase.client.{Connection, ConnectionFactory, Result, ResultScanner, Scan}
+import org.apache.hadoop.hbase.client.{ConnectionFactory, Scan}
+import org.apache.hadoop.hbase.filter.{Filter, PrefixFilter}
 import org.apache.hadoop.hbase.util.Bytes
+import org.apache.hadoop.hbase.{CellUtil, HBaseConfiguration, TableName}
 import org.apache.log4j.{Level, Logger}
-import java.io.IOException
-import scala.collection.JavaConverters._
-
-import org.apache.hadoop.hbase.filter.PrefixFilter
-import org.apache.hadoop.hbase.filter.Filter
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.DataFrame
-import org.apache.hadoop.hbase.client.Put
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.Row
-import org.apache.hadoop.hbase.CellUtil
+import org.apache.spark.sql.{Row, SparkSession}
+
+import scala.collection.JavaConverters._
 
 object hBaseScanTable {
   System.setProperty("hadoop.home.dir", "C:\\winutils")
@@ -23,10 +17,10 @@ object hBaseScanTable {
     Logger.getLogger("org").setLevel(Level.ERROR)
     println("Scanning of Table Starts")
     val spark = SparkSession
-    .builder()
-    .appName("HBaseSparkDataFrame")
-    .master("local[*]")
-    .getOrCreate()
+      .builder()
+      .appName("HBaseSparkDataFrame")
+      .master("local[*]")
+      .getOrCreate()
 
     // Create a new Hbase DB Connection
     val conf = HBaseConfiguration.create()
@@ -42,8 +36,8 @@ object hBaseScanTable {
     val scan: Scan = new Scan()
 
     // Set the filter condition
-    var prfxValue = "key"
-    val filter: Filter = new PrefixFilter(Bytes.toBytes(prfxValue))
+    val prefixValue = "key"
+    val filter: Filter = new PrefixFilter(Bytes.toBytes(prefixValue))
     scan.setFilter(filter)
 
     scan.addColumn(Bytes.toBytes("personal"), Bytes.toBytes("name"))
@@ -100,7 +94,7 @@ object hBaseScanTable {
     // create the schema from the header
     val header = newColValMap.head.keys.toList
     val schema = StructType(header.map(fieldName =>
-      StructField(fieldName, StringType, true)))
+      StructField(fieldName, StringType, nullable = true)))
     val sc = spark.sparkContext
 
     // create your rdd

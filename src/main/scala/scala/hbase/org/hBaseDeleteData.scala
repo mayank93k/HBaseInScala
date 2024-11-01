@@ -1,10 +1,8 @@
-package spark.practice.mayank.hbase
+package scala.hbase.org
 
-import java.io.IOException
-
-import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
-import org.apache.hadoop.hbase.client.{Admin, Connection, ConnectionFactory, Delete, Get}
+import org.apache.hadoop.hbase.client.{ConnectionFactory, Delete, Get}
 import org.apache.hadoop.hbase.util.Bytes
+import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
 import org.apache.log4j.{Level, Logger}
 
 object hBaseDeleteData {
@@ -19,8 +17,7 @@ object hBaseDeleteData {
     val connection = ConnectionFactory.createConnection(conf)
 
     //**********************Deletion of HBase Table Data********************
-
-    var tableName: String = "employee"
+    val tableName: String = "employee"
     val table = TableName.valueOf(tableName)
     val getTableName = connection.getTable(table)
     val delete = new Delete(Bytes.toBytes("key_1000"))

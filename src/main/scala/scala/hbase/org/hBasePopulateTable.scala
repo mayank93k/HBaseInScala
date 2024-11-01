@@ -1,14 +1,12 @@
-package spark.practice.mayank.hbase
+package scala.hbase.org
 
-import org.apache.log4j.{Level, Logger}
-import org.apache.hadoop.hbase.HBaseConfiguration
-import org.apache.hadoop.hbase.client.{Connection, ConnectionFactory, HBaseAdmin}
-import org.apache.hadoop.hbase.client.Put
+import org.apache.hadoop.hbase.client.{ConnectionFactory, Put}
 import org.apache.hadoop.hbase.util.Bytes
-import org.apache.hadoop.hbase.TableName
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.SQLContext
-import spark.practice.mayank.hbase.tableSchema._
+import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.SparkSession
+
+import scala.hbase.org.tableSchema.Employee
 
 
 object hBasePopulateTable {
@@ -31,17 +29,15 @@ object hBasePopulateTable {
     //Lets set the column Families
     val cfPersonal = "personal"
     val cfProfessional = "professional"
-    val spark = new SparkContext("local[*]", "Age")
-    val sqlContext = new SQLContext(spark)
-    import sqlContext.implicits._
-    val loadData = spark.textFile("/home/mayank/Downloads/HBase/resource/hbaseTest")
+    val spark = SparkSession.builder().appName("Age").master("local").getOrCreate()
+    val loadData = spark.sparkContext.textFile("/home/mayank/Downloads/HBase/resource/hbaseTest")
 
     val records = loadData.map(line => {
       val row = line.split(",")
       val id = row(0).toInt
-      val name = row(1).toString
-      val city = row(2).toString
-      val designation = row(3).toString
+      val name = row(1)
+      val city = row(2)
+      val designation = row(3)
       val salary = row(4).toInt
       Employee(id, name, city, designation, salary)
     }).collect().toList

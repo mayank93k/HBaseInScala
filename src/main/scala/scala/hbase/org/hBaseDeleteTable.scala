@@ -1,10 +1,10 @@
-package spark.practice.mayank.hbase
+package scala.hbase.org
+
+import org.apache.hadoop.hbase.client.{Admin, Connection, ConnectionFactory}
+import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
+import org.apache.log4j.{Level, Logger}
 
 import java.io.IOException
-
-import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
-import org.apache.hadoop.hbase.client.{Admin, Connection, ConnectionFactory}
-import org.apache.log4j.{Level, Logger}
 
 object hBaseDeleteTable {
   System.setProperty("hadoop.home.dir", "C:\\winutils")
@@ -14,7 +14,7 @@ object hBaseDeleteTable {
     println("Delete Table Starts")
     var connection: Connection = null
     var admin: Admin = null
-    var tableName: String = "employee"
+    val tableName: String = "employee"
     //**********************Deleting HBase Table********************
 
     try {
