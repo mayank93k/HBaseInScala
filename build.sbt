@@ -1,4 +1,4 @@
-name := "Project_HBase"
+name := "HBase In Scala"
 
 version := "0.1"
 
